@@ -40,9 +40,10 @@ features = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday',
  'Wednesday', 'BAYVIEW', 'CENTRAL', 'INGLESIDE', 'MISSION',
  'NORTHERN', 'PARK', 'RICHMOND', 'SOUTHERN', 'TARAVAL', 'TENDERLOIN']
 
-
 training, validation = train_test_split(train_data, train_size=.60)
-model = BernoulliNB()
+
+#Logistic Regression for comparison
+model = LogisticRegression(C=.01)
 model.fit(training[features], training['crime'])
 predicted = np.array(model.predict_proba(validation[features]))
 log_loss(validation['crime'], predicted)
