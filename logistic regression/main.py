@@ -3,6 +3,7 @@ __author__ = 'farzin'
 import pandas as pd
 from sklearn.cross_validation import train_test_split
 from sklearn import preprocessing
+from sklearn.metrics import log_loss
 from sklearn.linear_model import LogisticRegression
 import numpy as np
 
@@ -44,8 +45,11 @@ training, validation = train_test_split(train_data, train_size=.60)
 model = LogisticRegression(C=.01)
 model.fit(training[features], training['crime'])
 predicted = np.array(model.predict_proba(validation[features]))
+print(log_loss(validation['crime'], predicted))
 
-
+model = LogisticRegression(C=.01)
+model.fit(train_data[features], train_data['crime'])
+predicted = model.predict_proba(test_data[features])
 #Write results
 result=pd.DataFrame(predicted, columns=le_crime.classes_)
 result.to_csv('testResult.csv', index = True, index_label = 'Id' )

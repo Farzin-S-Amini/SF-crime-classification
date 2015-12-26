@@ -3,9 +3,7 @@ __author__ = 'farzin'
 import pandas as pd
 from sklearn.cross_validation import train_test_split
 from sklearn import preprocessing
-from sklearn.metrics import log_loss
 from sklearn.naive_bayes import BernoulliNB
-from sklearn.linear_model import LogisticRegression
 import numpy as np
 
 #Load Data with pandas, and parse the first column into datetime
@@ -45,9 +43,11 @@ training, validation = train_test_split(train_data, train_size=.60)
 model = BernoulliNB()
 model.fit(training[features], training['crime'])
 predicted = np.array(model.predict_proba(validation[features]))
-log_loss(validation['crime'], predicted)
+print(log_loss(validation['crime'], predicted))
 
-
+model = BernoulliNB()
+model.fit(train_data[features], train_data['crime'])
+predicted = model.predict_proba(test_data[features])
 #Write results
 result=pd.DataFrame(predicted, columns=le_crime.classes_)
 result.to_csv('testResult.csv', index = True, index_label = 'Id' )
