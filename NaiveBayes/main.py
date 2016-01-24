@@ -3,13 +3,10 @@ __author__ = 'farzin'
 import pandas as pd
 from sklearn.cross_validation import train_test_split
 from sklearn import preprocessing
-from sklearn.metrics import log_loss
 from sklearn.naive_bayes import BernoulliNB
-import numpy as np
 
 #Load Data with pandas, and parse the first column into datetime
 train=pd.read_csv('train.csv', parse_dates = ['Dates'])
-test=pd.read_csv('test.csv', parse_dates = ['Dates'])
 #Convert crime labels to numbers
 le_crime = preprocessing.LabelEncoder()
 crime = le_crime.fit_transform(train.Category)
@@ -24,16 +21,6 @@ hour = pd.get_dummies(hour)
 train_data = pd.concat([hour, days, district], axis=1)
 train_data['crime']=crime
 
-#Repeat for test data
-days = pd.get_dummies(test.DayOfWeek)
-district = pd.get_dummies(test.PdDistrict)
-
-hour = test.Dates.dt.hour
-hour = pd.get_dummies(hour)
-
-test_data = pd.concat([hour, days, district], axis=1)
-
-#training, validation = train_test_split(train_data, train_size=.60)
 
 features = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday',
  'Wednesday', 'BAYVIEW', 'CENTRAL', 'INGLESIDE', 'MISSION',
@@ -43,12 +30,5 @@ features = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday',
 training, validation = train_test_split(train_data, train_size=.60)
 model = BernoulliNB()
 model.fit(training[features], training['crime'])
-predicted = np.array(model.predict_proba(validation[features]))
-print(log_loss(validation['crime'], predicted))
-
-model = BernoulliNB()
-model.fit(train_data[features], train_data['crime'])
-predicted = model.predict_proba(test_data[features])
-#Write results
-result=pd.DataFrame(predicted, columns=le_crime.classes_)
-result.to_csv('testResult.csv', index = True, index_label = 'Id' )
+score = model.score(validation[features],validation['crime'])
+print(score)
