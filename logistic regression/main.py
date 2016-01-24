@@ -27,6 +27,9 @@ features = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday',
  'Wednesday', 'BAYVIEW', 'CENTRAL', 'INGLESIDE', 'MISSION',
  'NORTHERN', 'PARK', 'RICHMOND', 'SOUTHERN', 'TARAVAL', 'TENDERLOIN']
 
+features2 = [x for x in range(0,24)]
+features = features + features2
+
 training, validation = train_test_split(train_data, train_size=.60)
 
 #Logistic Regression for comparison
